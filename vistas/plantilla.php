@@ -7,7 +7,9 @@
 	<link rel="stylesheet" href="<?php echo SERVERURL; ?>vistas/css/main.css">
 	<link rel="shortcut icon" href="<?php echo SERVERURL; ?>logo5.ico">
 	<!--librerias de buscador-->    
-    <link rel="stylesheet" type="text/css" href="<?php echo SERVERURL; ?>vistas/css/select2.css">
+	<link rel="stylesheet" type="text/css" href="<?php echo SERVERURL; ?>vistas/css/select2.css">
+	<!--librerias de datepicker-->    
+	<link rel="stylesheet" href="<?php echo SERVERURL; ?>vistas/css/bootstrap-datepicker3.min.css" integrity="sha256-mlKJFBS1jbZwwDrZD1ApO7YFS6MA1XDN37jZ9GDFC64=" crossorigin="anonymous" />
 	
 	<?php include "./vistas/modulos/script.php"; ?>
 </head>

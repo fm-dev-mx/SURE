@@ -13,12 +13,13 @@
 	require "./controladores/administradorControlador.php";
 	$IAdmin= new administradorControlador();
 	$CAdmin=$IAdmin->datos_administrador_controlador("Conteo",0);
+	require "./controladores/consultaControlador.php";
+	$IConsulta= new consultaControlador();
+	$CConsulta=$IConsulta->datos_consulta_controlador("Conteo",0);
 	require "./controladores/pacienteControlador.php";
 	$IPaciente= new pacienteControlador();
 	$CPaciente=$IPaciente->datos_paciente_controlador("Conteo",0);
-	require "./controladores/carreraControlador.php";
-	$ICarrera= new carreraControlador();
-	$CCarrera=$ICarrera->datos_carrera_controlador("Conteo",0);
+
 ?>
 
 <div class="container-fluid">	
@@ -51,28 +52,28 @@
 	<a href="<?php echo SERVERURL; ?>univList/">
 		<article class="full-box tile">
 			<div class="full-box tile-title text-center text-titles text-uppercase">
-				Universidades
+				Consultas
 			</div>
 			<div class="full-box tile-icon text-center">
-				<i class="zmdi zmdi-balance"></i>
+				<i class="zmdi zmdi-assignment"></i>
 			</div>
 			<div class="full-box tile-number text-titles">
-				<p class="full-box"><?php echo $CUniv->rowCount(); ?></p>
-				<small>Register</small>
+				<p class="full-box"><?php echo $CConsulta->rowCount(); ?></p>
+				<small>Registrados</small>
 			</div>
 		</article>
 	</a>
-	<a href="<?php echo SERVERURL; ?>carrera/">
+	<a href="<?php echo SERVERURL; ?>pacienteSearch/">
 		<article class="full-box tile">
 			<div class="full-box tile-title text-center text-titles text-uppercase">
-				Carreras
+				Pacientes
 			</div>
 			<div class="full-box tile-icon text-center">
 				<i class="zmdi zmdi-library"></i>
 			</div>
 			<div class="full-box tile-number text-titles">
-				<p class="full-box"><?php echo $CCarrera->rowCount(); ?></p>
-				<small>Register</small>
+				<p class="full-box"><?php echo $CPaciente->rowCount(); ?></p>
+				<small>Registrados</small>
 			</div>
 		</article>
 	</a>

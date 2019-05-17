@@ -160,3 +160,79 @@ function cargar(){
         }
     })
 }
+
+$(function(){
+$('#datecontainer .input-group.date').datepicker({
+    format: "yyyy/mm/dd",
+    startView: 3,
+    maxViewMode: 3,
+    language: "es",
+    keyboardNavigation: true,
+    forceParse: false,
+    autoclose: true
+});
+})
+
+$(document).ready(function(){   
+    $("#selectorAlumno").ready(function() {  
+        if($("#empleado").is(':checked')) {  
+            $("#div-empleado").show();
+            $("#div-alumno").hide();            
+            $("#AlumnoMatricula").prop('required',false);
+            $("#AlumnoCarrera").prop('required',false);
+            $("#AlumnoSemestre").prop('required',false);
+            $("#EmpleadoPuesto").prop('required',true);
+            $("#EmpleadoNumEmpl").prop('required',true);
+        }else{
+            if($("#alumno").is(':checked')) {  
+            $("#div-alumno").show();
+            $("#div-empleado").hide();
+            $("#AlumnoMatricula").prop('required',true);
+            $("#AlumnoCarrera").prop('required',true);
+            $("#AlumnoSemestre").prop('required',true);
+            $("#EmpleadoPuesto").prop('required',false);
+            $("#EmpleadoNumEmpl").prop('required',false);
+            }else{
+                $("#div-alumno").hide();
+                $("#div-empleado").hide();
+                $("#AlumnoMatricula").prop('required',false);
+                $("#AlumnoCarrera").prop('required',false);
+                $("#AlumnoSemestre").prop('required',false);
+                $("#EmpleadoPuesto").prop('required',false);
+                $("#EmpleadoNumEmpl").prop('required',false);
+            }
+        }
+    });  
+});  
+
+$(document).ready(function(){   
+    $("#selectorAlumno").click(function() {  
+        if($("#empleado").is(':checked')) {  
+            $("#div-empleado").show();
+            $("#div-alumno").hide();            
+            $("#AlumnoMatricula").prop('required',false);
+            $("#AlumnoCarrera").prop('required',false);
+            $("#AlumnoSemestre").prop('required',false);
+            $("#EmpleadoPuesto").prop('required',true);
+            $("#EmpleadoNumEmpl").prop('required',true);
+        }else{
+            if($("#alumno").is(':checked')) {  
+            $("#div-alumno").show();
+            $("#div-empleado").hide();
+            $("#AlumnoMatricula").prop('required',true);
+            $("#AlumnoCarrera").prop('required',true);
+            $("#AlumnoSemestre").prop('required',true);
+            $("#EmpleadoPuesto").prop('required',false);
+            $("#EmpleadoNumEmpl").prop('required',false);
+            }else{
+                $("#div-alumno").hide();
+                $("#div-empleado").hide();
+                $("#AlumnoMatricula").prop('required',false);
+                $("#AlumnoCarrera").prop('required',false);
+                $("#AlumnoSemestre").prop('required',false);
+                $("#EmpleadoPuesto").prop('required',false);
+                $("#EmpleadoNumEmpl").prop('required',false);
+            }
+        }
+    });  
+});  

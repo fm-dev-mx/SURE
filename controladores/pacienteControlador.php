@@ -8,79 +8,181 @@
 
     class pacienteControlador extends pacienteModelo{
 		public function agregar_paciente_controlador(){
-            $nombre=mainModel::limpiar_cadena($_POST['nombreUniversidad-reg']);
-            $telefono=mainModel::limpiar_cadena($_POST['telefono-reg']);
-            $direccion=mainModel::limpiar_cadena($_POST['direccion-reg']);
-			$iniciales=mainModel::limpiar_cadena($_POST['iniciales-reg']);
-			$pais=mainModel::limpiar_cadena($_POST['pais-reg']);
-			$estado=mainModel::limpiar_cadena($_POST['estado-reg']);
-			$ciudad=mainModel::limpiar_cadena($_POST['ciudad-reg']);
-			$tipoUniversidad=mainModel::limpiar_cadena($_POST['optionsPublica']);
+			$nombre=mainModel::limpiar_cadena($_POST['PacienteNombre']);
+			$apellido=mainModel::limpiar_cadena($_POST['PacienteApellido']);
+			$fechaNac=mainModel::limpiar_cadena($_POST['PacienteFechaNac']);
+			$lugarNac=mainModel::limpiar_cadena($_POST['PacienteLugarNac']);
+			$fechaNac=mainModel::limpiar_cadena($_POST['PacienteCiudad']);
+			$colonia=mainModel::limpiar_cadena($_POST['PacienteColonia']);
+			$calle=mainModel::limpiar_cadena($_POST['PacienteCalle']);
+			$numero=mainModel::limpiar_cadena($_POST['PacienteNumero']);
+			$fechaRadica=mainModel::limpiar_cadena($_POST['PacienteFechaRadica']);
+			$telefono=mainModel::limpiar_cadena($_POST['PacienteTelefono']);
+			$contacto=mainModel::limpiar_cadena($_POST['PacienteContacto']);
+			$contactoParentesco=mainModel::limpiar_cadena($_POST['PacienteContactoParentesco']);
+			$contactoTelefono=mainModel::limpiar_cadena($_POST['PacienteContactoTelefono']);
+			$email=mainModel::limpiar_cadena($_POST['PacienteEmail']);
+			$estadoCivil=mainModel::limpiar_cadena($_POST['PacienteEstadoCivil']);
+			$gradoEstudios=mainModel::limpiar_cadena($_POST['PacienteGradoEstudios']);
+			$ocupacion=mainModel::limpiar_cadena($_POST['PacienteOcupacion']);
+			$religion=mainModel::limpiar_cadena($_POST['PacienteReligion']);
+			$servicioMedico=mainModel::limpiar_cadena($_POST['PacienteServicioMedico']);
+			$alumEmpl=mainModel::limpiar_cadena($_POST['alumno']);
+			$terapeuta=mainModel::limpiar_cadena($_POST['PacienteTerapeuta']);
 
-            $consulta1=mainModel::ejecutar_consulta_simple("SELECT id FROM universidad WHERE (UniversidadIniciales='$iniciales' AND UniversidadNombre='$nombre' AND UniversidadCiudad='$ciudad')");
-	
+            $consulta1=mainModel::ejecutar_consulta_simple("SELECT PacienteCodigo FROM paciente WHERE (PacienteNombre='$nombre' AND PacienteApellido='$apellido' AND PacienteFechaNac='$fechaNac')");
+				
 			if($consulta1->rowCount()>=1){
                 $alerta=[
                     "Alerta"=>"simple",
                     "Titulo"=>"Ocurrió un error inesperado",
-                    "Texto"=>"El instituto ya existe en el sistema, favor de intentar nuevamente!",
+                    "Texto"=>"El paciente ya existe en el sistema, favor de verificar los datos!",
                     "Tipo"=>"error"
                 ];
-			}else{
-				
-				$consulta=mainModel::ejecutar_consulta_simple("SELECT id FROM universidad");
-				$numero=($consulta->rowCount())+1;
-				$codigo=mainModel::generar_codigo_aleatorio("UV",7,$numero);
-				$dataAc=[
+			}else{				
+				$consulta=mainModel::ejecutar_consulta_simple("SELECT PacienteCodigo FROM paciente");
+				$numeroRegistro=($consulta->rowCount())+1;
+				$codigo=mainModel::generar_codigo_aleatorio("PC",7,$numeroRegistro);
+				$dataPaciente=[
+					"Codigo"=>$codigo,
 					"Nombre"=>$nombre,
-					"Telefono"=>$telefono,
-					"Direccion"=>$direccion,
-					"Iniciales"=>$iniciales,
-					"Tipo"=>$tipoUniversidad,
-					"Pais"=>$pais,
-					"Estado"=>$estado,
-					"Ciudad"=>$ciudad,
-					"Codigo"=>$codigo
+					"Apellido"=>$apellido,
+					"FechaNac"=>$fechaNac,		
+					"LugarNac"=>$lugarNac,			
+					"Ciudad"=>$fechaNac,
+					"Colonia"=>$colonia,		
+					"Calle"=>$calle,
+					"Numero"=>$numero,	
+					"FechaRadica"=>$fechaRadica,
+					"Telefono"=>$telefono,			
+					"Contacto"=>$contacto,			
+					"ContactoParentesco"=>$contactoParentesco,
+					"ContactoTelefono"=>$contactoTelefono,
+					"Email"=>$email,
+					"EstadoCivil"=>$estadoCivil,
+					"GradoEstudios"=>$gradoEstudios,
+					"Ocupacion"=>$ocupacion,				
+					"Religion"=>$religion,			
+					"ServicioMedico"=>$servicioMedico,
+					"AlumEmpl"=>$alumEmpl,
+					"Terapeuta"=>$terapeuta
 				];
 
-				$guardarUniversidad=universidadModelo::agregar_universidad_modelo($dataAc);
+				//alumno
+				if($_POST['AlumnoMatricula']!="" && $_POST['AlumnoCarrera']!=""){
+					$matricula=mainModel::limpiar_cadena($_POST['AlumnoMatricula']);
+					$carrera=mainModel::limpiar_cadena($_POST['AlumnoCarrera']);
+					$semestre=mainModel::limpiar_cadena($_POST['AlumnoSemestre']);
 
-				if($guardarUniversidad->rowCount()>=1){
-					$alerta=[
-						"Alerta"=>"limpiar",
-						"Titulo"=>"Instituto registrado",
-						"Texto"=>"El instituto se registro con exito en el sistema",
-						"Tipo"=>"success"
+					$dataAlumno=[
+						"Codigo"=>$codigo,
+						"Matricula"=>$matricula,
+						"Carrera"=>$carrera,
+						"Semestre"=>$semestre
 					];
+
+					$guardarAlumno=pacienteModelo::agregar_alumno_modelo($dataAlumno);
+					if($guardarAlumno->rowCount()>=1){						
+						$guardarPaciente=pacienteModelo::agregar_paciente_modelo($dataPaciente);
+						if($guardarPaciente->rowCount()>=1){
+							$alerta=[
+								"Alerta"=>"recargar",
+								"Titulo"=>"Paciente registrado!",
+								"Texto"=>"Los datos del paciente han sido registrados con exito",
+								"Tipo"=>"success"
+							];
+						}else{
+							//borrar alumno (falta)
+							$alerta=[
+								"Alerta"=>"simple",
+								"Titulo"=>"Ocurrió un error inesperado",
+								"Texto"=>"No hemos podido registrar el paciente, por favor intente nuevamente3333",
+								"Tipo"=>"error"
+							];	
+						}
+					}else{
+						$alerta=[
+							"Alerta"=>"simple",
+							"Titulo"=>"Ocurrió un error inesperado",
+							"Texto"=>"No hemos podido registrar el alumno, por favor intente nuevamente",
+							"Tipo"=>"error"
+						];
+					}					
+				//Empleado	
+				}elseif($_POST['EmpleadoNumEmpl']!="" && $_POST['EmpleadoPuesto']!=""){
+					$numEmpl=mainModel::limpiar_cadena($_POST['EmpleadoNumEmpl']);
+					$puesto=mainModel::limpiar_cadena($_POST['EmpleadoPuesto']);
+					$dataEmpleado=[
+						"Codigo"=>$codigo,
+						"NumEmpl"=>$numEmpl,
+						"Puesto"=>$puesto
+					];
+					$guardarEmpleado=pacienteModelo::agregar_empleado_modelo($dataEmpleado);
+					if($guardarEmpleado->rowCount()>=1){
+						$guardarPaciente=pacienteModelo::agregar_paciente_modelo($dataPaciente);
+						if($guardarPaciente->rowCount()>=1){
+							$alerta=[
+								"Alerta"=>"recargar",
+								"Titulo"=>"Paciente registrado!",
+								"Texto"=>"Los datos del paciente han sido registrados con exito",
+								"Tipo"=>"success"
+							];
+						}else{
+							//borrar empleado (falta)
+							$alerta=[
+								"Alerta"=>"simple",
+								"Titulo"=>"Ocurrió un error inesperado",
+								"Texto"=>"No hemos podido registrar el empleado, por favor intente nuevamente",
+								"Tipo"=>"error"
+							];	
+						}
+					}else{
+						$alerta=[
+							"Alerta"=>"simple",
+							"Titulo"=>"Ocurrió un error inesperado",
+							"Texto"=>"No hemos podido registrar el empleado, por favor intente nuevamente",
+							"Tipo"=>"error"
+						];
+					}					
+				//externo
 				}else{
-					$alerta=[
-						"Alerta"=>"simple",
-						"Titulo"=>"Ocurrió un error inesperado",
-						"Texto"=>"No hemos podido registrar el instituto, por favor intente nuevamente",
-						"Tipo"=>"error"
-					];
-				}
+					$guardarPaciente=pacienteModelo::agregar_paciente_modelo($dataPaciente);
+					if($guardarPaciente->rowCount()>=1){
+						$alerta=[
+							"Alerta"=>"limpiar",
+							"Titulo"=>"Paciente registrado",
+							"Texto"=>"El paciente se registro con exito en el sistema",
+							"Tipo"=>"success"
+						];
+					}else{
+						$alerta=[
+							"Alerta"=>"simple",
+							"Titulo"=>"Ocurrió un error inesperado",
+							"Texto"=>"No hemos podido registrar el paciente, por favor intente nuevamente5555",
+							"Tipo"=>"error"
+						];
+					}
+				}								
 			}
             return mainModel::sweet_alert($alerta);
         }
 
-		// Controlador para paginar universidades
-		public function paginador_universidad_controlador($pagina,$registros,$privilegio,$busqueda){
-
+		// Controlador para paginar pacientes
+		public function paginador_paciente_controlador($pagina,$registros,$privilegio,$busqueda){
 			$pagina=mainModel::limpiar_cadena($pagina);
 			$registros=mainModel::limpiar_cadena($registros);
 			$privilegio=mainModel::limpiar_cadena($privilegio);
 			$busqueda=mainModel::limpiar_cadena($busqueda);
 			$tabla="";
-
+			
 			$pagina= (isset($pagina) && $pagina>0) ? (int) $pagina : 1;
 			$inicio= ($pagina>0) ? (($pagina*$registros)-$registros) : 0;
 
 			if(isset($busqueda) && $busqueda!=""){
-				$consulta="SELECT SQL_CALC_FOUND_ROWS * FROM universidad WHERE (UniversidadNombre LIKE '%$busqueda%' OR UniversidadIniciales LIKE '%$busqueda%' OR UniversidadPais LIKE '%$busqueda%' OR UniversidadEstado LIKE '%$busqueda%' OR UniversidadCiudad LIKE '%$busqueda%' OR UniversidadTipo LIKE '%$busqueda%') ORDER BY UniversidadNombre ASC LIMIT $inicio,$registros";
+				$consulta="SELECT SQL_CALC_FOUND_ROWS * FROM paciente WHERE (PacienteNombre LIKE '%$busqueda%' OR PacienteApellido LIKE '%$busqueda%' OR PacienteTelefono LIKE '%$busqueda%' OR PacienteEmail LIKE '%$busqueda%') ORDER BY PacienteApellido ASC LIMIT $inicio,$registros";
 				$paginaurl="univSearch";
 			}else{
-				$consulta="SELECT SQL_CALC_FOUND_ROWS * FROM universidad ORDER BY UniversidadNombre ASC LIMIT $inicio,$registros";
+				$consulta="SELECT SQL_CALC_FOUND_ROWS * FROM paciente ORDER BY PacienteApellido ASC LIMIT $inicio,$registros";
 				$paginaurl="univList";
 			}
 
@@ -101,13 +203,13 @@
 						<tr>
 							<th class="text-center">#</th>
 							<th class="text-center">NOMBRE</th>
-							<th class="text-center">INICIALES</th>
-							<th class="text-center">TELÉFONO</th>
-							<th class="text-center">CAMPUS</th>
-							<th class="text-center">VER CARRERAS</th>';
+							<th class="text-center">APELLIDO</th>
+							<th class="text-center">FECHA DE NAC</th>
+							<th class="text-center">TELEFONO</th>
+							<th class="text-center">TERAPEUTA</th>';
 						if($privilegio<=2){
 							$tabla.='
-								<th class="text-center">A. DATOS</th>
+								<th class="text-center">SELECCIONAR</th>
 							';
 						}
 						if($privilegio==1){
@@ -120,32 +222,21 @@
 					</thead>
 					<tbody>
 			';
-
 			if($total>=1 && $pagina<=$Npaginas){
 				$contador=$inicio+1;
 				foreach($datos as $rows){
 					$tabla.='
 						<tr>
 							<td>'.$contador.'</td>
-							<td>'.$rows['UniversidadNombre'].'</td>
-							<td>'.$rows['UniversidadIniciales'].'</td>
-							<td>'.$rows['UniversidadTelefono'].'</td>
-							<td>'.$rows['UniversidadCiudad'].'</td>
-							<td>
-								<form action="'.SERVERURL.'ajax/universidadAjax.php" method="POST">
-									<input type="hidden" name="uniSelect" value="'.mainModel::encryption($rows['UniversidadCodigo']).'">									
-									<button type="submit" class="btn btn-success btn-raised btn-xs">
-										<i class="zmdi zmdi-bookmark"></i>
-									</button>
-								</form>
-							</td>';
-								/*<a href="'.SERVERURL.'carrera/'.mainModel::encryption($rows['UniversidadCodigo']).'/" class="btn btn-success btn-raised btn-xs">
-									<i class="zmdi zmdi-bookmark"></i>
-								  </a>*/
+							<td>'.$rows['PacienteNombre'].'</td>
+							<td>'.$rows['PacienteApellido'].'</td>
+							<td>'.$rows['PacienteFechaNac'].'</td>
+							<td>'.$rows['PacienteTelefono'].'</td>
+							<td>'.$rows['PacienteTerapeuta'].'</td>';
 							if($privilegio<=2){
 								$tabla.='
 									<td>
-										<a href="'.SERVERURL.'univ/'.mainModel::encryption($rows['UniversidadCodigo']).'/" class="btn btn-success btn-raised btn-xs">
+										<a href="'.SERVERURL.'paciente/'.mainModel::encryption($rows['PacienteCodigo']).'/" class="btn btn-success btn-raised btn-xs">
 											<i class="zmdi zmdi-refresh"></i>
 										</a>
 									</td>
@@ -154,8 +245,8 @@
 							if($privilegio==1){
 								$tabla.='
 									<td>
-										<form action="'.SERVERURL.'ajax/universidadAjax.php" method="POST" class="FormularioAjax" data-form="delete" entype="multipart/form-data" autocomplete="off">
-											<input type="hidden" name="codigo-del" value="'.mainModel::encryption($rows['UniversidadCodigo']).'">
+										<form action="'.SERVERURL.'ajax/pacienteAjax.php" method="POST" class="FormularioAjax" data-form="delete" entype="multipart/form-data" autocomplete="off">
+											<input type="hidden" name="codigo-del" value="'.mainModel::encryption($rows['PacienteCodigo']).'">
 											<input type="hidden" name="privilegio-admin" value="'.mainModel::encryption($privilegio).'">
 											<button type="submit" class="btn btn-danger btn-raised btn-xs">
 												<i class="zmdi zmdi-delete"></i>
@@ -218,7 +309,7 @@
 			return $tabla;
 		}
 
-		public function eliminar_universidad_controlador(){
+		public function eliminar_paciente_controlador(){
 			$codigo=mainModel::decryption($_POST['codigo-del']);
 			$adminPrivilegio=mainModel::decryption($_POST['privilegio-admin']);
 
@@ -227,20 +318,20 @@
 
 			if($adminPrivilegio==1){
 				
-				$DelUniv=universidadModelo::eliminar_universidad_modelo($codigo);
+				$DelPaciente=pacienteModelo::eliminar_paciente_modelo($codigo);
 				
-				if($DelUniv->rowCount()>=1){
+				if($DelPaciente->rowCount()>=1){
 					$alerta=[
 						"Alerta"=>"recargar",
-						"Titulo"=>"Instituto eliminado",
-						"Texto"=>"El institutos fue eliminado del sistema con éxito",
+						"Titulo"=>"Paciente eliminado",
+						"Texto"=>"El paciente fue eliminado del sistema con éxito",
 						"Tipo"=>"success"
 					];
 				}else{
 					$alerta=[
 						"Alerta"=>"simple",
 						"Titulo"=>"Ocurrió un error inesperado",
-						"Texto"=>"No podemos eliminar este instituto en este momento, favor de intentar nuevamente!!",
+						"Texto"=>"No podemos eliminar este paciente en este momento, favor de intentar nuevamente!!",
 						"Tipo"=>"error"
 					];
 				}
@@ -255,29 +346,57 @@
 			return pacienteModelo::datos_paciente_modelo($tipo,$codigo);
 		}
 
-		public function actualizar_universidad_controlador(){
-			$nombre=mainModel::limpiar_cadena($_POST['nombreUniversidad-reg']);
-            $telefono=mainModel::limpiar_cadena($_POST['telefono-reg']);
-            $direccion=mainModel::limpiar_cadena($_POST['direccion-reg']);
-			$iniciales=mainModel::limpiar_cadena($_POST['iniciales-reg']);
-			$pais=mainModel::limpiar_cadena($_POST['pais-reg']);
-			$estado=mainModel::limpiar_cadena($_POST['estado-reg']);
-			$ciudad=mainModel::limpiar_cadena($_POST['ciudad-reg']);
-			$tipoUniversidad=mainModel::limpiar_cadena($_POST['optionsPublica']);
-			$codigo=mainModel::decryption($_POST['codigoUniversidad-up']);
-			$query1=mainModel::ejecutar_consulta_simple("SELECT * FROM universidad WHERE UniversidadCodigo='$codigo'");
-			$DatosUniv=$query1->fetch();
+		public function datos_alumno_controlador($tipo,$codigo){
+			$tipo=mainModel::limpiar_cadena($tipo);
+			$codigo=mainModel::decryption($codigo);
 
-			if($nombre!=$DatosUniv['UniversidadNombre'] || $iniciales!=$DatosUniv['UniversidadIniciales'] || $ciudad!=$DatosUniv['UniversidadCiudad']){
-				$consulta1=mainModel::ejecutar_consulta_simple("SELECT UniversidadNombre FROM universidad WHERE UniversidadNombre='$nombre'");
-				$consulta2=mainModel::ejecutar_consulta_simple("SELECT UniversidadIniciales FROM universidad WHERE UniversidadIniciales='$iniciales'");
-				$consulta3=mainModel::ejecutar_consulta_simple("SELECT UniversidadCiudad FROM universidad WHERE UniversidadCiudad='$ciudad'");
+			return pacienteModelo::datos_alumno_modelo($tipo,$codigo);
+		}
+
+		public function datos_empleado_controlador($tipo,$codigo){
+			$tipo=mainModel::limpiar_cadena($tipo);
+			$codigo=mainModel::decryption($codigo);
+
+			return pacienteModelo::datos_empleado_modelo($tipo,$codigo);
+		}
+
+		public function actualizar_paciente_controlador(){
+			$codigo=mainModel::limpiar_cadena($_POST['PacienteCodigo']);
+			$nombre=mainModel::limpiar_cadena($_POST['PacienteNombre']);
+			$apellido=mainModel::limpiar_cadena($_POST['PacienteApellido']);
+			$fechaNac=mainModel::limpiar_cadena($_POST['PacienteFechaNac']);
+			$lugarNac=mainModel::limpiar_cadena($_POST['PacienteLugarNac']);
+			$fechaNac=mainModel::limpiar_cadena($_POST['PacienteCiudad']);
+			$colonia=mainModel::limpiar_cadena($_POST['PacienteColonia']);
+			$calle=mainModel::limpiar_cadena($_POST['PacienteCalle']);
+			$numero=mainModel::limpiar_cadena($_POST['PacienteNumero']);
+			$fechaRadica=mainModel::limpiar_cadena($_POST['PacienteFechaRadica']);
+			$telefono=mainModel::limpiar_cadena($_POST['PacienteTelefono']);
+			$contacto=mainModel::limpiar_cadena($_POST['PacienteContacto']);
+			$contactoParentesco=mainModel::limpiar_cadena($_POST['PacienteContactoParentesco']);
+			$contactoTelefono=mainModel::limpiar_cadena($_POST['PacienteContactoTelefono']);
+			$email=mainModel::limpiar_cadena($_POST['PacienteEmail']);
+			$estadoCivil=mainModel::limpiar_cadena($_POST['PacienteEstadoCivil']);
+			$gradoEstudios=mainModel::limpiar_cadena($_POST['PacienteGradoEstudios']);
+			$ocupacion=mainModel::limpiar_cadena($_POST['PacienteOcupacion']);
+			$religion=mainModel::limpiar_cadena($_POST['PacienteReligion']);
+			$servicioMedico=mainModel::limpiar_cadena($_POST['PacienteServicioMedico']);
+			$alumEmpl=mainModel::limpiar_cadena($_POST['alumno']);
+			$terapeuta=mainModel::limpiar_cadena($_POST['PacienteTerapeuta']);
+			
+			$query1=mainModel::ejecutar_consulta_simple("SELECT * FROM paciente WHERE PacienteCodigo='$codigo'");
+			$DatosPaciente=$query1->fetch();
+
+			if($nombre!=$DatosPaciente['PacienteNombre'] || $apellido!=$DatosPaciente['PacienteApellido'] || $fechaNac!=$DatosPaciente['PacienteFechaNac']){
+				$consulta1=mainModel::ejecutar_consulta_simple("SELECT PacienteNombre FROM paciente WHERE PacienteNombre='$nombre'");
+				$consulta2=mainModel::ejecutar_consulta_simple("SELECT PacienteApellido FROM paciente WHERE PacienteApellido='$apellido'");
+				$consulta3=mainModel::ejecutar_consulta_simple("SELECT PacienteFechaNac FROM paciente WHERE PacienteFechaNac='$fechaNac'");
 		
 				if(($consulta1->rowCount()>=1) && ($consulta2->rowCount()>=1) && ($consulta3->rowCount()>=1)){
 					$alerta=[
 						"Alerta"=>"simple",
 						"Titulo"=>"Ocurrió un error inesperado",
-						"Texto"=>"Los datos del instituto que acaba de ingresar ya se encuentran registrados en el sistema",
+						"Texto"=>"Los datos del paciente que acaba de ingresar ya se encuentran registrados en el sistema",
 						"Tipo"=>"error"
 					];
 					return mainModel::sweet_alert($alerta);
@@ -285,30 +404,43 @@
 				}
 			}
 
-			$dataAd=[
+			$dataPaciente=[
 				"Codigo"=>$codigo,
 				"Nombre"=>$nombre,
-				"Telefono"=>$telefono,
-				"Direccion"=>$direccion,
-				"Iniciales"=>$iniciales,
-				"Tipo"=>$tipoUniversidad,
-				"Pais"=>$pais,
-				"Estado"=>$estado,
-				"Ciudad"=>$ciudad
+				"Apellido"=>$apellido,
+				"FechaNac"=>$fechaNac,		
+				"LugarNac"=>$lugarNac,			
+				"Ciudad"=>$fechaNac,
+				"Colonia"=>$colonia,		
+				"Calle"=>$calle,
+				"Numero"=>$numero,	
+				"FechaRadica"=>$fechaRadica,
+				"Telefono"=>$telefono,			
+				"Contacto"=>$contacto,			
+				"ContactoParentesco"=>$contactoParentesco,
+				"ContactoTelefono"=>$contactoTelefono,
+				"Email"=>$email,
+				"EstadoCivil"=>$estadoCivil,
+				"GradoEstudios"=>$gradoEstudios,
+				"Ocupacion"=>$ocupacion,				
+				"Religion"=>$religion,			
+				"ServicioMedico"=>$servicioMedico,
+				"AlumEmpl"=>$alumEmpl,
+				"Terapeuta"=>$terapeuta
 			];
 
-			if(universidadModelo::actualizar_universidad_modelo($dataAd)){
+			if(pacienteModelo::actualizar_paciente_modelo($dataPaciente)){
 				$alerta=[
 					"Alerta"=>"recargar",
 					"Titulo"=>"Datos actualizados!",
-					"Texto"=>"Los datos del instituto han sido actualizados con exito",
+					"Texto"=>"Los datos del paciente han sido actualizados con exito",
 					"Tipo"=>"success"
 				];
 			}else{
 				$alerta=[
 					"Alerta"=>"simple",
 					"Titulo"=>"Ocurrió un error inesperado",
-					"Texto"=>"No hemos podido actualizar los datos del instituto, por favor intente nuevamente",
+					"Texto"=>"No hemos podido actualizar los datos del paciente, por favor intente nuevamente",
 					"Tipo"=>"error"
 				];
 			}

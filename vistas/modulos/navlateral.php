@@ -52,19 +52,13 @@
 				</a>
 				<ul class="list-unstyled full-box">
 					<li>
-						<a href="<?php echo SERVERURL; ?>univList/"><i class="zmdi zmdi-balance zmdi-hc-fw"></i> Universidades</a>
+						<a href="<?php echo SERVERURL; ?>pacienteSearch/"><i class="zmdi zmdi-library zmdi-hc-fw"></i> Pacientes</a>
 					</li>
 					<li>
-						<a href="<?php echo SERVERURL; ?>carrera/"><i class="zmdi zmdi-bookmark zmdi-hc-fw"></i> Carreras</a>
+						<a href="<?php echo SERVERURL; ?>carrera/"><i class="zmdi zmdi-assignment zmdi-hc-fw"></i> Consultas</a>
 					</li>
 					<li>
-						<a href="<?php echo SERVERURL; ?>materias/"><i class="zmdi zmdi-book zmdi-hc-fw"></i> Materias</a>
-					</li>
-					<li>
-						<a href="<?php echo SERVERURL; ?>carrerauacj/"><i class="zmdi zmdi-bookmark zmdi-hc-fw"></i> Carreras - UACJ</a>
-					</li>
-					<li>
-						<a href="<?php echo SERVERURL; ?>materiasuacjlist/"><i class="zmdi zmdi-book zmdi-hc-fw"></i> Materias - UACJ</a>
+						<a href="<?php echo SERVERURL; ?>materias/"><i class="zmdi zmdi-long-arrow-right zmdi-hc-fw"></i> Canalizaciones</a>
 					</li>
 				</ul>
 			</li>
@@ -76,8 +70,10 @@
 					<li>
 						<a href="<?php echo SERVERURL; ?>admin/"><i class="zmdi zmdi-account zmdi-hc-fw"></i> Administradores</a>
 					</li>
+				</ul>
+				<ul class="list-unstyled full-box">
 					<li>
-						<a href="<?php echo SERVERURL; ?>home/"><i class="zmdi zmdi-male-female zmdi-hc-fw"></i> Clientes</a>
+						<a href="<?php echo SERVERURL; ?>terapeuta/"><i class="zmdi zmdi-account zmdi-hc-fw"></i> Terapeutas</a>
 					</li>
 				</ul>
 			</li>
